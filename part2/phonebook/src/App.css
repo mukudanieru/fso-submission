@@ -1,0 +1,67 @@
+* {
+  box-sizing: border-box;
+}
+
+.input-container {
+  display: flex;
+  width: fit-content;
+  gap: 0.4rem;
+}
+
+.modal-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  height: 100%;
+  width: 100%;
+  padding: 2rem;
+  inset: 0;
+  top: 0;
+  left: 0;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  background-color: white;
+  border-radius: 0.5rem;
+  max-width: 400px;
+  padding: 2rem;
+  width: 100%;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 0.5rem;
+
+  width: 100%;
+}
+
+.title {
+  margin: 0;
+}
+
+.modal-buttons button {
+  flex: 1;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  width: 100%;
+  margin: 0 auto;
+}
+
+.input-container-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
