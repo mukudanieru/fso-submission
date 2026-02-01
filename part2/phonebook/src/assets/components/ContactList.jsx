@@ -1,6 +1,14 @@
 import Contact from "./Contact";
 
-const ContactList = ({ persons }) => {
+const ContactList = ({ persons, error }) => {
+  if (error) {
+    return (
+      <ol>
+        <div>{error}</div>
+      </ol>
+    );
+  }
+
   if (persons.length === 0)
     return (
       <ol>

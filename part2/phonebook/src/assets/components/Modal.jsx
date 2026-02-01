@@ -11,9 +11,9 @@ const Modal = ({ showModal, onClose, onAddPerson }) => {
     e.preventDefault();
 
     const personObject = {
-      id: crypto.randomUUID(),
       name: fullName,
       number: phoneNumber,
+      id: crypto.randomUUID(),
     };
 
     onAddPerson(personObject);
