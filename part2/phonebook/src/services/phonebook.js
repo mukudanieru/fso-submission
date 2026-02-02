@@ -30,20 +30,9 @@ const deletePerson = (id) => {
   });
 };
 
-const errorMessage = (error, setError) => {
-  if (error.response) {
-    setError(`Server error (${error.response.status})`);
-  } else if (error.request) {
-    setError("Cannot connect to server. Is the backend running?");
-  } else {
-    setError("Something went wrong");
-  }
-};
-
 export default {
   getAll,
   createPerson,
   updatePerson,
   deletePerson,
-  errorMessage,
 };

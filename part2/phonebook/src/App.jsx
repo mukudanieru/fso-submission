@@ -1,7 +1,10 @@
 import ContactList from "./assets/components/ContactList";
 import Modal from "./assets/components/Modal";
 import Button from "./assets/components/Button";
+import Notification from "./assets/components/Notification";
+
 import phonebookService from "./services/phonebook";
+import { createNotification } from "./utils/notification";
 import { useEffect, useState } from "react";
 import "./App.css";
 
@@ -9,7 +12,7 @@ const App = () => {
   const [persons, setPersons] = useState([]);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [error, setError] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState(null); // type, title, description
 
   useEffect(() => {
     console.log("useEffect ran");
@@ -20,7 +23,13 @@ const App = () => {
         setPersons(data);
       })
       .catch((error) => {
-        phonebookService.errorMessage(error, setError);
+        const message = error.request
+          ? "Cannot connect to server. Is the backend running?"
+          : "Something went wrong!";
+
+        setNotificationMessage(
+          createNotification("Request Error", message, "error"),
+        );
       });
   }, []);
 
@@ -59,9 +68,25 @@ const App = () => {
       .createPerson(personObject)
       .then((data) => {
         setPersons(persons.concat(data));
+
+        setNotificationMessage(
+          createNotification(
+            "Contact Added",
+            `${personObject.name} has been added`,
+          ),
+        );
+        setTimeout(() => {
+          setNotificationMessage(null);
+        }, 5000);
       })
       .catch((error) => {
-        phonebookService.errorMessage(error, setError);
+        const message = error.request
+          ? "Cannot connect to server. Is the backend running?"
+          : "Something went wrong!";
+
+        setNotificationMessage(
+          createNotification("Request Error", message, "error"),
+        );
       });
   };
 
@@ -75,8 +100,17 @@ const App = () => {
           const updatedPersons = persons.filter((p) => p.id !== data.id);
           setPersons(updatedPersons);
         })
-        .catch((error) => {
-          phonebookService.errorMessage(error, setError);
+        .catch(() => {
+          setNotificationMessage(
+            createNotification(
+              "Request Error",
+              `Information of ${personToDelete.name} has already been removed from server.`,
+              "error",
+            ),
+          );
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 5000);
         });
     }
 
@@ -94,6 +128,8 @@ const App = () => {
       <div>
         <h1>Phonebook</h1>
 
+        <Notification message={notificationMessage} />
+
         <div className="input-container">
           <input
             type="text"
@@ -106,7 +142,6 @@ const App = () => {
 
         <ContactList
           persons={filtered}
-          error={error}
           handleDeletePerson={handleDeletePerson}
         />
       </div>

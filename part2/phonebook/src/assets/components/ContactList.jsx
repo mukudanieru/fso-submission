@@ -1,14 +1,6 @@
 import Contact from "./Contact";
 
-const ContactList = ({ persons, error, handleDeletePerson }) => {
-  if (error) {
-    return (
-      <ol>
-        <div>{error}</div>
-      </ol>
-    );
-  }
-
+const ContactList = ({ persons, handleDeletePerson }) => {
   if (persons.length === 0)
     return (
       <ol>
