@@ -1,6 +1,6 @@
 import Contact from "./Contact";
 
-const ContactList = ({ persons, error }) => {
+const ContactList = ({ persons, error, handleDeletePerson }) => {
   if (error) {
     return (
       <ol>
@@ -19,7 +19,11 @@ const ContactList = ({ persons, error }) => {
   return (
     <ol>
       {persons.map((person) => (
-        <Contact key={person.id} person={person} />
+        <Contact
+          key={person.id}
+          person={person}
+          handleDeletePerson={handleDeletePerson}
+        />
       ))}
     </ol>
   );

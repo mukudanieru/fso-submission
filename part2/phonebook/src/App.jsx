@@ -1,9 +1,9 @@
 import ContactList from "./assets/components/ContactList";
 import Modal from "./assets/components/Modal";
 import Button from "./assets/components/Button";
+import phonebookService from "./services/phonebook";
 import { useEffect, useState } from "react";
 import "./App.css";
-import axios from "axios";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -14,20 +14,13 @@ const App = () => {
   useEffect(() => {
     console.log("useEffect ran");
 
-    axios
-      .get("http://localhost:3001/persons")
-      .then((response) => {
-        setPersons(response.data);
+    phonebookService
+      .getAll()
+      .then((data) => {
+        setPersons(data);
       })
       .catch((error) => {
-        console.log(error);
-        if (error.response) {
-          setError(`Server error (${error.response.status})`);
-        } else if (error.request) {
-          setError("Cannot connect to server. Is the backend running?");
-        } else {
-          setError("Something went wrong");
-        }
+        phonebookService.errorMessage(error, setError);
       });
   }, []);
 
@@ -40,7 +33,54 @@ const App = () => {
   };
 
   const handleAddPerson = (personObject) => {
-    setPersons(persons.concat(personObject));
+    const existingPerson = persons.find((p) => p.name === personObject.name);
+
+    if (existingPerson) {
+      if (
+        window.confirm(
+          `${existingPerson.name} is already added to phonebook, replace the old number with a new one?`,
+        )
+      ) {
+        phonebookService
+          .updatePerson(existingPerson.id, personObject)
+          .then((data) => {
+            setPersons(
+              persons.map((p) => {
+                return p.id === existingPerson.id ? data : p;
+              }),
+            );
+          });
+      }
+
+      return;
+    }
+
+    phonebookService
+      .createPerson(personObject)
+      .then((data) => {
+        setPersons(persons.concat(data));
+      })
+      .catch((error) => {
+        phonebookService.errorMessage(error, setError);
+      });
+  };
+
+  const handleDeletePerson = (id) => {
+    const personToDelete = persons.find((p) => p.id === id);
+
+    if (window.confirm(`Delete ${personToDelete.name} ?`)) {
+      phonebookService
+        .deletePerson(id)
+        .then((data) => {
+          const updatedPersons = persons.filter((p) => p.id !== data.id);
+          setPersons(updatedPersons);
+        })
+        .catch((error) => {
+          phonebookService.errorMessage(error, setError);
+        });
+    }
+
+    return;
   };
 
   console.log(persons);
@@ -64,7 +104,11 @@ const App = () => {
           <Button onClick={handleShowModal} title={"Add"} />
         </div>
 
-        <ContactList persons={filtered} error={error} />
+        <ContactList
+          persons={filtered}
+          error={error}
+          handleDeletePerson={handleDeletePerson}
+        />
       </div>
 
       <Modal

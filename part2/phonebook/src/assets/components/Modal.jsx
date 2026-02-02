@@ -13,7 +13,7 @@ const Modal = ({ showModal, onClose, onAddPerson }) => {
     const personObject = {
       name: fullName,
       number: phoneNumber,
-      id: crypto.randomUUID(),
+      // id: crypto.randomUUID(),
     };
 
     onAddPerson(personObject);

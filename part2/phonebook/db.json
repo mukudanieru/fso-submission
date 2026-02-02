@@ -19,6 +19,21 @@
       "name": "Mary Poppendieck",
       "number": "39-23-6423122",
       "id": "4"
+    },
+    {
+      "id": "fba7",
+      "name": "Juan Dela Cruz",
+      "number": "0917-234-5678"
+    },
+    {
+      "id": "9348",
+      "name": "Maria Santos",
+      "number": "+63 908 456 1234"
+    },
+    {
+      "name": "John Daniel Garan",
+      "number": "+63 969 326 5994",
+      "id": "c563"
     }
   ]
 }
